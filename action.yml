@@ -30,6 +30,14 @@ inputs:
     type: string
     description: 'Deployment type.'
     required: true
+  SLACK_CHANNEL:
+    type: string
+    description: 'Slack channel to send the notification to.'
+    required: false
+  SLACK_TOKEN:
+    type: string
+    description: 'Slack token to authenticate the request.'
+    required: false
   
 
 runs:
@@ -58,17 +66,12 @@ runs:
         echo "🔗 Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> summary.txt
         echo "🔗 Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
         echo "==============================================================================================="
-        
-    - name: Test
-      shell: bash
-      run: |
-        cat summary.txt
 
     - name: No notification needed
       if: ${{ inputs.messaging_app == 'none' }}
       shell: bash
       run: |
-        echo "No notification needed. Skipping this job."  
+        echo "No notification needed. Skipping this job. Just showing the summary."  
 
     - name: Email notification
       if: ${{ inputs.messaging_app == 'email' }}
@@ -80,10 +83,23 @@ runs:
       if: ${{ inputs.messaging_app == 'slack' }}
       shell: bash
       run: |
-        echo "Sending Slack notification to the team."
+        message=$(cat summary.txt)
+        curl -d "text=$message" -d "channel=${{ secrets.SLACK_CHANNEL }}" -H "Authorization: Bearer ${{ secrets.SLACK_TOKEN }}" -X POST https://slack.com/api/chat.postMessage
 
     - name: Microsoft Teams notification
       if: ${{ inputs.messaging_app == 'msteams' }}
       shell: bash
       run: |
         echo "Sending Microsoft Teams notification to the team."
+
+    - name: Discord notification
+      if: ${{ inputs.messaging_app == 'discord' }}
+      shell: bash
+      run: |
+        echo "Sending Discord notification to the team."
+
+    - name: Telegram notification
+      if: ${{ inputs.messaging_app == 'telegram' }}
+      shell: bash
+      run: |
+        echo "Sending Telegram notification to the team."
