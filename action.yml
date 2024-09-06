@@ -25,9 +25,9 @@ runs:
         echo "====================================== WORKFLOW SUMMARY ======================================="
         echo "## Workflow information" >> $GITHUB_STEP_SUMMARY
         echo "## Workflow information" >> summary.txt
-        echo "🔧 Technology: ${{ inputs.technology }} | Docker enabled: ${{ inputs.docker }} | Self-hosted runners: ${{ inputs.self-hosted-runner }} | Deployment type: ${{ inputs.deployment }}"
-        echo "🔧 Technology: ${{ inputs.technology }} | Docker enabled: ${{ inputs.docker }} | Self-hosted runners: ${{ inputs.self-hosted-runner }} | Deployment type: ${{ inputs.deployment }}" >> summary.txt
-        echo "🔧 Technology: ${{ inputs.technology }} | Docker enabled: ${{ inputs.docker }} | Self-hosted runners: ${{ inputs.self-hosted-runner }} | Deployment type: ${{ inputs.deployment }}" >> $GITHUB_STEP_SUMMARY
+        echo "🔧 Technology: ${{ inputs.technology }} | Docker enabled: ${{ inputs.docker }} | Self-hosted runners: ${{ inputs.self-hosted-runner }} | Deployment type: ${{ inputs.deployment }} | Artifact name: ${{ inputs.artifact_name }}."
+        echo "🔧 Technology: ${{ inputs.technology }} | Docker enabled: ${{ inputs.docker }} | Self-hosted runners: ${{ inputs.self-hosted-runner }} | Deployment type: ${{ inputs.deployment }} | Artifact name: ${{ inputs.artifact_name }}." >> summary.txt
+        echo "🔧 Technology: ${{ inputs.technology }} | Docker enabled: ${{ inputs.docker }} | Self-hosted runners: ${{ inputs.self-hosted-runner }} | Deployment type: ${{ inputs.deployment }} | Artifact name: ${{ inputs.artifact_name }}." >> $GITHUB_STEP_SUMMARY
         echo "👤 Workflow (${{ github.workflow }}) triggered on ${{ github.event_name }} by ${{ github.actor }} on ${{ github.repository }} repository (${{ github.ref }} branch)."
         echo "👤 Workflow (${{ github.workflow }}) triggered on ${{ github.event_name }} by ${{ github.actor }} on ${{ github.repository }} repository (${{ github.ref }} branch)." >> summary.txt
         echo "👤 Workflow (${{ github.workflow }}) triggered on ${{ github.event_name }} by ${{ github.actor }} on ${{ github.repository }} repository (${{ github.ref }} branch)." >> $GITHUB_STEP_SUMMARY
@@ -41,8 +41,6 @@ runs:
         echo "🔗 Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> summary.txt
         echo "🔗 Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
         echo "==============================================================================================="
-
-        Recuperar el artifact name del build, pasarselo
         
     - name: Test
       shell: bash
