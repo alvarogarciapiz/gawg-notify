@@ -1,39 +1,44 @@
-name: 'GAWG Validate Build'
-description: 'This actiosn belogns to the GAWG workflow and is used to validate the configurations, Dockerfile, secrets, deployment, and runner.'
+name: 'GAWG Notify action'
+description: 'This action sends a notification containing workflow info to the desired channel.'
 author: Álvaro García Pizarro
 branding:
-  icon: 'settings'
+  icon: 'inbox'
   color: 'gray-dark'
 
 inputs:
-  technology:
+  messaging_app:
     type: string
-    description: 'Repository name with owner. For example, actions/checkout'
-
-  docker:
-    type: boolean
-    description: 'Flag to validate the Dockerfile.'
-    default: false
-
-  self-hosted-runner:
-    type: boolean
-    description: 'Flag to validate the self-hosted runner.'
-    default: false
-
-  deployment:
-    type: string
-    description: 'Deployment type. For example, kubernetes, helm, etc.'
-
-outputs:
-  test:
-    description: "test"
-    value: ${{ steps.test.outputs.random-number }}
+    description: 'Messaging app to send the notification to.'
+    required: true
 
 runs:
   using: "composite"
-  id: test
   steps:
-    - name: Test
+    - name: Generate Workflow Summary Report
       shell: bash
       run: |
-        echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
+        echo $GITHUB_STEP_SUMMARY
+        
+    - name: No notification needed
+      if: ${{ inputs.messaging_app == 'none' }}
+      shell: bash
+      run: |
+        echo "No notification needed. Skipping this job."  
+
+    - name: Email notification
+      if: ${{ inputs.messaging_app == 'email' }}
+      shell: bash
+      run: |
+        echo "Sending email notification to the team."
+
+    - name: Slack notification
+      if: ${{ inputs.messaging_app == 'slack' }}
+      shell: bash
+      run: |
+        echo "Sending Slack notification to the team."
+
+    - name: Microsoft Teams notification
+      if: ${{ inputs.messaging_app == 'msteams' }}
+      shell: bash
+      run: |
+        echo "Sending Microsoft Teams notification to the team."
