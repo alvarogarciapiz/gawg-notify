@@ -84,7 +84,7 @@ runs:
       shell: bash
       run: |
         message=$(cat summary.txt)
-        curl -d "text=$message" -d "channel=${{ secrets.SLACK_CHANNEL }}" -H "Authorization: Bearer ${{ secrets.SLACK_TOKEN }}" -X POST https://slack.com/api/chat.postMessage
+        curl -d "text=$message" -d "channel=${{ inputs.SLACK_CHANNEL }}" -H "Authorization: Bearer ${{ inputs.SLACK_TOKEN }}" -X POST https://slack.com/api/chat.postMessage
 
     - name: Microsoft Teams notification
       if: ${{ inputs.messaging_app == 'msteams' }}
