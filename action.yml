@@ -81,13 +81,14 @@ runs:
       if: ${{ inputs.messaging_app == 'email' }}
       shell: bash
       run: |
-        echo "Sending email notification to the team."
+        echo "Thank you for using GAWG Notify action. Email notification is not supported yet in our free plan. Please upgrade to the premium plan to use this feature."
+        echo "⚠️ Thank you for using GAWG Notify action. Email notification is not supported yet in our free plan. Please upgrade to the premium plan to use this feature." >> $GITHUB_STEP_SUMMARY  
 
     - name: Slack notification
       if: ${{ inputs.messaging_app == 'slack' }}
       shell: bash
       run: |
-        echo "Checking Slack Toekn and CHannel is set in repository secrets."
+        echo "Checking Slack Token and Channel is set in repository secrets."
 
         if [ -z "${{ inputs.SLACK_CHANNEL }}" ]; then
           echo "Error: SLACK_CHANNEL is not set. To obtain a channel ID, right-click on the channel name and select 'Copy link'. The channel ID is the last part of the URL."
@@ -113,13 +114,14 @@ runs:
       if: ${{ inputs.messaging_app == 'msteams' }}
       shell: bash
       run: |
-        echo "Sending Microsoft Teams notification to the team."
+        echo "⚠️ Thank you for using GAWG Notify action. Microsoft Teams notification is not supported yet in our free plan. Please upgrade to the premium plan to use this feature."
+        echo "⚠️ Thank you for using GAWG Notify action. Microsoft Teams notification is not supported yet in our free plan. Please upgrade to the premium plan to use this feature." >> $GITHUB_STEP_SUMMARY
 
     - name: Discord notification
       if: ${{ inputs.messaging_app == 'discord' }}
       shell: bash
       run: |
-        echo "Checking Slack Toekn and CHannel is set in repository secrets."
+        echo "Checking Discord webhook url is set in repository secrets."
 
         if [ -z "${{ inputs.DISCORD_WEBHOOK_URL }}" ]; then
           echo "❌ Error: DISCORD_WEBHOOK_URL is not set, to obtain a webhook URL, go to your Discord server settings, select 'Integrations', and create a new webhook."
@@ -131,10 +133,11 @@ runs:
         export message=$(cat summary.txt)
         curl -H "Content-Type: application/json" \
             -d "{\"content\": \"$message\"}" \
-            $DISCORD_WEBHOOK_URL
+            ${{ inputs.DISCORD_WEBHOOK_URL }}
 
     - name: Telegram notification
       if: ${{ inputs.messaging_app == 'telegram' }}
       shell: bash
       run: |
-        echo "Sending Telegram notification to the team."
+        echo "⚠️ Thank you for using GAWG Notify action. Telegram notification is not supported yet in our free plan. Please upgrade to the premium plan to use this feature."
+        echo "⚠️ Thank you for using GAWG Notify action. Telegram notification is not supported yet in our free plan. Please upgrade to the premium plan to use this feature." >> $GITHUB_STEP_SUMMARY
