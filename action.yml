@@ -84,7 +84,14 @@ runs:
       shell: bash
       run: |
         message=$(cat summary.txt)
-        curl -d "text=$message" -d "channel=${{ inputs.SLACK_CHANNEL }}" -H "Authorization: Bearer ${{ inputs.SLACK_TOKEN }}" -X POST https://slack.com/api/chat.postMessage
+        # curl -d "text=$message" -d "channel=${{ inputs.SLACK_CHANNEL }}" -H "Authorization: Bearer ${{ inputs.SLACK_TOKEN }}" -X POST https://slack.com/api/chat.postMessage
+
+        curl -H "Content-type: application/json" \
+        --data '{"channel":"${{ inputs.SLACK_CHANNEL }}","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"$message"}}]}' \
+        -H "Authorization: Bearer ${{ inputs.SLACK_TOKEN }}" \
+        -X POST https://slack.com/api/chat.postMessage
+
+        # Crear app, instalarla en un cana. Obtener el chat ID y el token Bot user OAutu Token de la sección Install App.
 
     - name: Microsoft Teams notification
       if: ${{ inputs.messaging_app == 'msteams' }}
