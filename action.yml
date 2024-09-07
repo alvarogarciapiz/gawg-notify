@@ -85,7 +85,7 @@ runs:
       run: |
         echo "Sending Slack notification to the team."
 
-        if [ -z "${{ inputs.SLACK_CHANNEL }}" ]; then
+        if [ -z "${{ inputs.SLACK_CHANNELL }}" ]; then
           echo "Error: SLACK_CHANNEL is not set. To obtain a channel ID, right-click on the channel name and select 'Copy link'. The channel ID is the last part of the URL."
           exit 1
         fi
