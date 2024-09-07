@@ -83,11 +83,11 @@ runs:
       if: ${{ inputs.messaging_app == 'slack' }}
       shell: bash
       run: |
-        message=$(cat summary.txt)
+        export message=$(cat summary.txt)
         # curl -d "text=$message" -d "channel=${{ inputs.SLACK_CHANNEL }}" -H "Authorization: Bearer ${{ inputs.SLACK_TOKEN }}" -X POST https://slack.com/api/chat.postMessage
 
         curl -H "Content-type: application/json" \
-        --data '{"channel":"${{ inputs.SLACK_CHANNEL }}","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"$message"}}]}' \
+        --data "{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"$message\"}}]}" \
         -H "Authorization: Bearer ${{ inputs.SLACK_TOKEN }}" \
         -X POST https://slack.com/api/chat.postMessage
 
