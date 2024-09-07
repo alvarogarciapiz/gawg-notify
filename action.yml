@@ -38,6 +38,10 @@ inputs:
     type: string
     description: 'Slack token to authenticate the request.'
     required: false
+  DISCORD_WEBHOOK_URL:
+    type: string
+    description: 'Discord webhook URL to send the notification to.'
+    required: false
   
 
 runs:
@@ -83,17 +87,17 @@ runs:
       if: ${{ inputs.messaging_app == 'slack' }}
       shell: bash
       run: |
-        echo "Sending Slack notification to the team."
+        echo "Checking Slack Toekn and CHannel is set in repository secrets."
 
-        if [ -z "${{ inputs.SLACK_CHANNELL }}" ]; then
+        if [ -z "${{ inputs.SLACK_CHANNEL }}" ]; then
           echo "Error: SLACK_CHANNEL is not set. To obtain a channel ID, right-click on the channel name and select 'Copy link'. The channel ID is the last part of the URL."
           echo "Error: SLACK_CHANNEL is not set. To obtain a channel ID, right-click on the channel name and select 'Copy link'. The channel ID is the last part of the URL." >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
 
         if [ -z "${{ inputs.SLACK_TOKEN }}" ]; then
-          echo "Error: SLACK_TOKEN is not set. To obtain a token, create a new Slack app, install it in a channel, and get the Bot user OAuth Token from the Install App section."
-          echo "Error: SLACK_TOKEN is not set. To obtain a token, create a new Slack app, install it in a channel, and get the Bot user OAuth Token from the Install App section." >> $GITHUB_STEP_SUMMARY
+          echo "❌ Error: SLACK_TOKEN is not set. To obtain a token, create a new Slack app, install it in a channel, and get the Bot user OAuth Token from the Install App section."
+          echo "❌ Error: SLACK_TOKEN is not set. To obtain a token, create a new Slack app, install it in a channel, and get the Bot user OAuth Token from the Install App section." >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
 
@@ -115,7 +119,19 @@ runs:
       if: ${{ inputs.messaging_app == 'discord' }}
       shell: bash
       run: |
+        echo "Checking Slack Toekn and CHannel is set in repository secrets."
+
+        if [ -z "${{ inputs.DISCORD_WEBHOOK_URL }}" ]; then
+          echo "❌ Error: DISCORD_WEBHOOK_URL is not set, to obtain a webhook URL, go to your Discord server settings, select 'Integrations', and create a new webhook."
+          echo "❌ Error: DISCORD_WEBHOOK_URL is not set, to obtain a webhook URL, go to your Discord server settings, select 'Integrations', and create a new webhook." >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+
         echo "Sending Discord notification to the team."
+        export message=$(cat summary.txt)
+        curl -H "Content-Type: application/json" \
+            -d "{\"content\": \"$message\"}" \
+            $DISCORD_WEBHOOK_URL
 
     - name: Telegram notification
       if: ${{ inputs.messaging_app == 'telegram' }}
