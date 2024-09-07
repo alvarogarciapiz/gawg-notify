@@ -130,9 +130,9 @@ runs:
         fi
 
         echo "Sending Discord notification to the team."
-        export message=$(cat summary.txt)
+        export message=$(cat summary.txt | jq -Rs .)
         curl -H "Content-Type: application/json" \
-            -d "{\"content\": \"$message\"}" \
+            -d "{\"content\": $message}" \
             ${{ inputs.DISCORD_WEBHOOK_URL }}
 
     - name: Telegram notification
