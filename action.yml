@@ -87,11 +87,13 @@ runs:
 
         if [ -z "${{ inputs.SLACK_CHANNELL }}" ]; then
           echo "Error: SLACK_CHANNEL is not set. To obtain a channel ID, right-click on the channel name and select 'Copy link'. The channel ID is the last part of the URL."
+          echo "Error: SLACK_CHANNEL is not set. To obtain a channel ID, right-click on the channel name and select 'Copy link'. The channel ID is the last part of the URL." >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
 
         if [ -z "${{ inputs.SLACK_TOKEN }}" ]; then
           echo "Error: SLACK_TOKEN is not set. To obtain a token, create a new Slack app, install it in a channel, and get the Bot user OAuth Token from the Install App section."
+          echo "Error: SLACK_TOKEN is not set. To obtain a token, create a new Slack app, install it in a channel, and get the Bot user OAuth Token from the Install App section." >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
 
