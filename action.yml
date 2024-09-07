@@ -83,15 +83,25 @@ runs:
       if: ${{ inputs.messaging_app == 'slack' }}
       shell: bash
       run: |
+        echo "Sending Slack notification to the team."
+
+        if [ -z "${{ inputs.SLACK_CHANNEL }}" ]; then
+          echo "Error: SLACK_CHANNEL is not set. To obtain a channel ID, right-click on the channel name and select 'Copy link'. The channel ID is the last part of the URL."
+          exit 1
+        fi
+
+        if [ -z "${{ inputs.SLACK_TOKEN }}" ]; then
+          echo "Error: SLACK_TOKEN is not set. To obtain a token, create a new Slack app, install it in a channel, and get the Bot user OAuth Token from the Install App section."
+          exit 1
+        fi
+
+        echo "Sending Slack notification to the team."
         export message=$(cat summary.txt)
-        # curl -d "text=$message" -d "channel=${{ inputs.SLACK_CHANNEL }}" -H "Authorization: Bearer ${{ inputs.SLACK_TOKEN }}" -X POST https://slack.com/api/chat.postMessage
 
         curl -H "Content-type: application/json" \
         --data "{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"$message\"}}]}" \
         -H "Authorization: Bearer ${{ inputs.SLACK_TOKEN }}" \
         -X POST https://slack.com/api/chat.postMessage
-
-        # Crear app, instalarla en un cana. Obtener el chat ID y el token Bot user OAutu Token de la sección Install App.
 
     - name: Microsoft Teams notification
       if: ${{ inputs.messaging_app == 'msteams' }}
